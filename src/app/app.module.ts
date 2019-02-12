@@ -6,24 +6,28 @@ import { HttpClientModule } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule, Routes} from '@angular/router';import { CookieService } from 'ngx-cookie-service';
 import { AuthGuard } from './auth/auth.guard';
-import { MenuComponent } from './MenuBar/menu.component'
+import { MenuComponent } from './MenuBar/menu.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MaterialModule } from './material';
+import { MaterialModule} from './material';
 import { LoginComponent } from './login/login.component';
 import { TokenInterceptorService } from './token/token-interceptor.service';
 import { ConfigurationComponent } from './Configuration/configuration.component';
 import { HomeComponent } from './home/home.component';
+import {MatTableModule, MatPaginator } from '@angular/material';
+import { UserstoriesComponent } from './userstories/userstories.component';
+
+import { MatTableDataSource} from '@angular/material';
 
 
 const routes: Routes = [
   {
-    path: '', 
+    path: '',
     redirectTo: 'login',
     pathMatch: 'full'
   },
   {
-    path: 'login', 
+    path: 'login',
     component: LoginComponent
   },
   {
@@ -40,42 +44,50 @@ const routes: Routes = [
         path: 'home',
         component: HomeComponent,
         canActivate: [AuthGuard]
-      } 
+      },
+      {
+        path: 'userstories',
+        component: UserstoriesComponent,
+        canActivate: [AuthGuard]
+      },
     ]
-  }
+  },
 
 ];
 
 @NgModule(
   {
-    declarations: 
+    declarations:
     [
       AppComponent,
       LoginComponent,
       MenuComponent,
       ConfigurationComponent,
-      HomeComponent
+      HomeComponent,
+      UserstoriesComponent,
     ],
-    imports: 
+    imports:
     [
       BrowserModule,
+      MatTableModule,
       HttpClientModule,
       AppRoutingModule,
       BrowserAnimationsModule,
-      MaterialModule, 
-      FormsModule, 
+      MaterialModule,
+      MatTableModule,
+      FormsModule,
       ReactiveFormsModule,
-      RouterModule.forRoot(routes)
+      RouterModule.forRoot(routes),
     ],
-    exports: [ RouterModule ],
-    providers: 
-    [ 
+    exports: [ RouterModule],
+    providers:
+    [
       {
         provide: HTTP_INTERCEPTORS,
         useClass: TokenInterceptorService,
         multi: true,
-      }, 
-      CookieService, 
+      },
+      CookieService,
       AuthGuard
     ],
     bootstrap: [ AppComponent ]
